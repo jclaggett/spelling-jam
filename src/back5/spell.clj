@@ -1,4 +1,4 @@
-(ns back5)
+(ns back5.spell)
 
 (def alphabet "abcdefghijklmnopqrstuvwxyz")
 
