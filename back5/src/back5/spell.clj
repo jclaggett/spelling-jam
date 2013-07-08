@@ -15,7 +15,8 @@
 (defn edits1 [word]
   (let [s (for [i (range (inc (count word)))] (split-at i word))
         deletes []
-        transposes []
+        transposes (for [[a,b] s :when (> (count b) 1)]
+                     (concat a [(second b)] [(first b)] (drop 2 b)))
         replaces []
         inserts [] ]
     (zipmap (concat deletes transposes replaces inserts) (repeat 1))))
