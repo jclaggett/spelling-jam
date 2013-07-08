@@ -12,6 +12,13 @@ defn get-words []
 
 (defn train [features]) ;; This is just Frequencies?
 
+(defn without-char [word i]
+  (str (apply str (take i word)) (apply str (drop (inc i) word))))
+
+(defn deletes [word]
+	(for [x (range (.length word))]
+		{(without-char word x) 1}))
+
 (defn edits1 [word]
   (let [s []
         deletes []
