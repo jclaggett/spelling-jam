@@ -20,6 +20,15 @@
         inserts [] ]
     (zipmap (concat deletes transposes replaces inserts) (repeat 1))))
 
+
+(defn edits1-replaces [a c b]
+  (let [adjacents (get back5.error/adjacencies c)]
+    (loop [adjacent-chars (apply concat adjacents)
+           replaces {}]
+      (if (= 0 (count adjacent-chars)) replaces
+          (recur (rest adjacent-chars)
+                 (assoc replaces (str a (first adjacent-chars) b) 1))))))
+
 (defn known-edits2 [word])
 
 (defn known [words]
