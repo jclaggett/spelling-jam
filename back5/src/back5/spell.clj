@@ -12,7 +12,13 @@ defn get-words []
 
 (defn train [features]) ;; This is just Frequencies?
 
-(defn edits1 [word])
+(defn edits1 [word]
+  (let [s []
+        deletes []
+        transposes []
+        replaces []
+        inserts [] ]
+    (zipmap (concat deletes transposes replaces inserts) (repeat 1))))
 
 (defn known-edits2 [word])
 
