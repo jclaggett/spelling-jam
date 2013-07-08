@@ -13,7 +13,7 @@
 (defn train [features]) ;; This is just Frequencies?
 
 (defn edits1 [word]
-  (let [s []
+  (let [s (for [i (range (inc (count word)))] (split-at i word))
         deletes []
         transposes []
         replaces []
