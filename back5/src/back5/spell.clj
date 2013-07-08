@@ -1,4 +1,5 @@
-(ns back5.spell)
+(ns back5.spell
+  (:require [back5.error]))
 
 (def alphabet "abcdefghijklmnopqrstuvwxyz")
 
