@@ -7,8 +7,8 @@ defn get-words []
         lines-lower (map #(.toLowerCase %) (line-seq f))]
     (mapcat #(re-seq #"[a-z]+" %) lines-lower)))
 
-(defn nwords []
-	(frequencies (get-words)))
+(def nwords
+  (frequencies (get-words)))
 
 (defn train [features]) ;; This is just Frequencies?
 
@@ -22,6 +22,12 @@ defn get-words []
 
 (defn known-edits2 [word])
 
-(defn known1 [words])
+(defn known [words]
+  (into {}
+        (for [word words
+              :when (nwords word)]
+          [word 1])))
 
-(defn correct [word])
+(defn correct [word]
+
+  )
