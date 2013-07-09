@@ -28,6 +28,12 @@
               r alphabet]
           [(apply str (concat a [r] (rest b))) 1])))
 
+(defn inserts [s]
+  (into {}
+        (for [[a b] s
+              i alphabet]
+          [(apply str (concat a [i] b)) 1])))
+
 (defn split-word [word]
   (for [i (range (inc (count word)))] (split-at i word)))
 
@@ -40,7 +46,7 @@
                                    (concat a [(second b)] [(first b)] (drop 2 b)))
                             1]))
         replaces (replaces s)
-        inserts [] ]
+        inserts (inserts s)]
     (merge-with max deletes transposes replaces inserts)))
 
 
