@@ -48,6 +48,12 @@
         inserts (inserts s)]
     (merge-with max deletes transposes replaces inserts)))
 
+(defn edits2 [word]
+  (into {}
+        (for [[word prob] (edits1 word)
+              [word2 prob2] (edits1 word)]
+          [word2 (* prob prob2)])))
+
 
 (defn edits1-replaces [a c b]
   (let [adjacents (get back5.error/adjacencies c)]
@@ -56,8 +62,6 @@
       (if (= 0 (count adjacent-chars)) replaces
           (recur (rest adjacent-chars)
                  (assoc replaces (str a (first adjacent-chars) b) 1))))))
-
-(defn known-edits2 [word])
 
 (defn known [words]
   (into {}
@@ -70,6 +74,6 @@
        (sort-by #(- (val %))
                 (merge-with max
                             {word 0.1}
-                            (known-edits2 word)
+                            (known (edits2 word))
                             (known {word 2})
                             (known (edits1 word))))))
