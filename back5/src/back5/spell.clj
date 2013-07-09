@@ -17,17 +17,21 @@
   (str (apply str (take i word)) (apply str (drop (inc i) word))))
 
 (defn deletes [word]
+  (into {}
 	(for [x (range (.length word))]
-		{(without-char word x) 1}))
+		[(without-char word x) 1])))
 
 (defn edits1 [word]
   (let [s (for [i (range (inc (count word)))] (split-at i word))
         deletes (deletes word)
-        transposes (for [[a,b] s :when (> (count b) 1)]
-                     (concat a [(second b)] [(first b)] (drop 2 b)))
+        transposes (into {}
+                         (for [[a,b] s :when (> (count b) 1)]
+                           [(apply str
+                                   (concat a [(second b)] [(first b)] (drop 2 b)))
+                            1]))
         replaces []
         inserts [] ]
-    (zipmap (concat deletes transposes replaces inserts) (repeat 1))))
+    (merge-with max deletes transposes replaces inserts)))
 
 
 (defn edits1-replaces [a c b]
