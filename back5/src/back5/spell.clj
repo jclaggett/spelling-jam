@@ -21,15 +21,25 @@
 	(for [x (range (.length word))]
 		[(without-char word x) 1])))
 
+(defn replaces [s]
+  (into {}
+        (for [[a b] s
+              :while (seq b)
+              r alphabet]
+          [(apply str (concat a [r] (rest b))) 1])))
+
+(defn split-word [word]
+  (for [i (range (inc (count word)))] (split-at i word)))
+
 (defn edits1 [word]
-  (let [s (for [i (range (inc (count word)))] (split-at i word))
+  (let [s (split-word word)
         deletes (deletes word)
         transposes (into {}
                          (for [[a,b] s :when (> (count b) 1)]
                            [(apply str
                                    (concat a [(second b)] [(first b)] (drop 2 b)))
                             1]))
-        replaces []
+        replaces (replaces s)
         inserts [] ]
     (merge-with max deletes transposes replaces inserts)))
 
