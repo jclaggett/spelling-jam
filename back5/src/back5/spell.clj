@@ -51,5 +51,9 @@
           [word 1])))
 
 (defn correct [word]
-
-  )
+  (map key
+       (sort-by val
+                (merge-with max
+                            (known-edits2 word)
+                            (known [word])
+                            (edits1 word)))))
