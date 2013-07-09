@@ -1,5 +1,6 @@
 (ns back5.spell
-  (:require [back5.error]))
+  (:require [back5.error]
+            [back5.test-correct :as t]))
 
 (def alphabet "abcdefghijklmnopqrstuvwxyz")
 
@@ -9,9 +10,7 @@
     (mapcat #(re-seq #"[a-z]+" %) lines-lower)))
 
 (def nwords
-  (frequencies (get-words)))
-
-(defn train [features]) ;; This is just Frequencies?
+  (frequencies (concat (get-words) (map second (t/parse t/test1)))))
 
 (defn without-char [word i]
   (str (apply str (take i word)) (apply str (drop (inc i) word))))
@@ -64,12 +63,13 @@
   (into {}
         (for [[word probability] words
               :when (nwords word)]
-          [word 1])))
+          [word probability])))
 
 (defn correct [word]
   (map key
-       (sort-by val
+       (sort-by #(- (val %))
                 (merge-with max
+                            {word 0.1}
                             (known-edits2 word)
-                            (known {word 1})
+                            (known {word 2})
                             (known (edits1 word))))))
