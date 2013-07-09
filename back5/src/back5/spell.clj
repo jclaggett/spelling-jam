@@ -62,7 +62,7 @@
 
 (defn known [words]
   (into {}
-        (for [word words
+        (for [[word probability] words
               :when (nwords word)]
           [word 1])))
 
@@ -71,5 +71,5 @@
        (sort-by val
                 (merge-with max
                             (known-edits2 word)
-                            (known [word])
-                            (edits1 word)))))
+                            (known {word 1})
+                            (known (edits1 word))))))
