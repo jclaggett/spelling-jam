@@ -19,15 +19,25 @@
   [word]
   [({"offen" "often"} word word)])
 
+(defn failseq
+  "Takes a list of word pairs and a correct-fn to test. Returns a
+  sequence of maps, each describing a failure case. Useful for
+  debugging the correct-fn at the repl."
+  [word-pairs correct-fn]
+  (for [[input want] word-pairs
+        :let [corrects (correct-fn input)]
+        :when (not= want (first corrects))]
+    {:in input :want want :got corrects}))
+
 (defn measure
   "Takes a list of word pairs and a correct-fn to measure. Returns the
   percentage of properly corrected words of total attempts."
   [word-pairs correct-fn]
-  (let [wins (count
-              (for [[input corrected] word-pairs
-                    :when (= corrected (first (correct-fn input)))]
-                :win))]
-    (float (* 100 (/ wins (count word-pairs))))))
+  (let [tests (count word-pairs)
+        fails (count (failseq word-pairs correct-fn))]
+    (float (* 100 (/ (- tests fails) tests)))))
+
+
 
 (comment
 
@@ -38,4 +48,8 @@
   ;=> 34.549877
 
   ;; 34% correct! not bad for a first try
+
+  (take 2 (t/failseq (t/parse t/test1) t/lame-correct))
+  ;=> ({:in "acess", :want "access", :got ["acess"]}
+  ;    {:in "accesing", :want "accessing", :got ["accesing"]}
   )
